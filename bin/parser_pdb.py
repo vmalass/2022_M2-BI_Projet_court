@@ -2,7 +2,8 @@
 import math
 from Bio.PDB import *
 import numpy
-from scipy.spatial.distance import *
+from scipy.spatial.distance import pdist, squareform
+import pandas
 
 ## 1) Parser pdb pour obtenir les atomes et les coordonnées
 
@@ -11,23 +12,28 @@ structure_id = "7YL9"
 filename = "7YL9.pdb"
 structure = parser.get_structure(structure_id, filename)
 
-residue = []
+resi = []
 atom_id = []
 atom_co = []
 for model in structure:
     for chain in model:
         for residue in chain:
-            residue.append(residue)
+            resi.append(residue)
             for atom in residue:
                 atom_id.append(atom)
                 atom_co.append(atom.get_coord())
 
+
 #print(atom_id)
 #print(atom_co)
 
-## 2) Calcule de la matrice de distance entre chaque atome
+## 2) Calcule de la matrice de distance entre chaque atome en data frame
 
-atom_co_array=numpy.array(atom_co) 
-distances_array = squareform(pdist(atom_co_array))
+atom_co_array=numpy.array(atom_co) #matrice avec les coordonnées
+distances_df = pandas.DataFrame(squareform(pdist(atom_co_array)), columns=atom_id, index=atom_id) #calcule des distances entre chaque atome et archivage dans un df
 
-print(distances_array.shape)
+print(distances_df)
+
+# 3) Dictionnaire des rayons de Vann der Waals
+
+vdw_rad = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S":1.8, "H20": 1.7}

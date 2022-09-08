@@ -4,15 +4,15 @@ import pandas
 import numpy
 
 #Creation de la sphere avec 92 points
-def fibonacci_sphere(n=92):
+def fibonacci_sphere():
 
     points = []
     gold = numpy.pi * (3. - numpy.sqrt(5.))  # nombre d'or
     sx =[]
     sy =[]
     sz =[]
-    for i in range(n):
-        y = 1 - (i / float(n - 1)) * 2
+    for i in range(92):
+        y = 1 - (i / float(92 - 1)) * 2
 
         radius = numpy.sqrt(1 - y * y)  # radius at y
         theta = gold * i  # golden angle increment

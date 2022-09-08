@@ -26,7 +26,8 @@ for model in structure:
 #print(atom_id)
 #print(atom_co)
 
-atom_co_df = pandas.DataFrame(atom_co, columns=['x_co','y_co','z_co'], index=atom_id)
+atom_co_df = pandas.DataFrame(atom_co, columns=['x_co','y_co','z_co'], index=atom_id) #df des atomes et de leurs coordonées
+#atom_co_df.insert(1, "residue", resi, allow_duplicates=True) 
 #print(atom_co_df)
 
 ## 2) Calcule de la matrice de distance entre chaque atome en data frame
@@ -34,7 +35,24 @@ atom_co_df = pandas.DataFrame(atom_co, columns=['x_co','y_co','z_co'], index=ato
 atom_co_array=numpy.array(atom_co) #matrice avec les coordonnées
 distances_df = pandas.DataFrame(squareform(pdist(atom_co_array)), columns=atom_id, index=atom_id) #calcule des distances entre chaque atome et archivage dans un df
 
-#print(distances_df)
+print(distances_df)
+
+## 3) Recherche des atomes voisins à 10A
+
+atom_voison=[]
+for i in range(distances_df):
+    numpy.where(distances_df[:][i]<10) #extrait les indexes ou la distance entre 2 atomes est inf a 10A
+    
+
+
+
+
+
+
+
+
+
+
 
 # 3) Dictionnaire des rayons de Vann der Waals
 

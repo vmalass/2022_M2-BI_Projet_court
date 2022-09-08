@@ -55,7 +55,7 @@ def fibonacci_sphere(coordonnee, vdw_ray):
         theta = gold * i  # golden angle increment
         x = numpy.cos(theta) * radius
         z = numpy.sin(theta) * radius
-        rayon=vdw_ray+1.7
+        rayon=vdw_ray+(1.7*2)
         sx.append(rayon * x + coordonnee[0])
         sy.append(rayon * y + coordonnee[1])
         sz.append(rayon * z + coordonnee[2])
@@ -70,6 +70,16 @@ distances_atom = squareform(pdist(atom_co)) #calcule des distances entre chaque 
 
 
 def distance_euclidienne(co_pts_sphere, co_voisin):
+    """
+    The distance_euclidienne function computes the Euclidean distance between two points.
+    
+    
+    
+    :param co_pts_sphere: Get the coordinates of the point in a sphere
+    :param co_voisin: Store the coordinates of a point in the sphere
+    :return: The distance between the two points
+    :doc-author: Trelent
+    """
     math.sqrt((co_pts_sphere[0]-co_voisin[0])**2+(co_pts_sphere[1]-co_voisin[2])**2+(co_pts_sphere[2]-co_voisin[2])**2)
 
 

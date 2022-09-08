@@ -1,0 +1,33 @@
+#Biopython parser pdb
+import math
+from Bio.PDB import *
+import numpy
+from scipy.spatial.distance import pdist, squareform
+import pandas
+
+## 1) Parser pdb pour obtenir les atomes et les coordonnées
+
+parser = PDBParser(PERMISSIVE=1)  #il ignore les erreurs
+structure_id = "1a8j"
+filename = "1a8j.pdb"
+structure = parser.get_structure(structure_id, filename)
+
+resi = []
+atom_id = []
+atom_co = []
+for model in structure:
+    for chain in model:
+        for residue in chain:
+            resi.append(residue)
+            for atom in residue:
+                atom_id.append(atom)
+                atom_co.append(atom.get_coord())
+#for chain in structure[0]:
+ #   for residue in chain:
+  #      resi.append(residue)
+   #     for atom in residue:
+    #        atom_id.append(str(atom)[6])
+     #       atom_co.append(atom.get_coord())
+print(len(atom_id))
+#print(atom_id)
+#print(atom_co)

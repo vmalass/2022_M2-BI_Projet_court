@@ -5,7 +5,17 @@ import numpy
 
 #Creation de la sphere avec 92 points
 def fibonacci_sphere():
-
+    """
+    The fibonacci_sphere function generates a sphere of points on the surface of a
+    fibonacci sphere. The function takes two arguments, coordonnee and vdw_ray.
+    coordonnee is an array containing the x, y and z coordinates for the center of 
+    the sphere. vdw_ray is an integer representing the radius in angstroms to be used 
+    for each point on the fibonacci sphere.
+    
+    :param coordonnee: Define the center of the sphere
+    :param vdw_ray: Set the radius of the sphere
+    :return: A list of points
+    """
     points = []
     gold = numpy.pi * (3. - numpy.sqrt(5.))  # nombre d'or
     sx =[]

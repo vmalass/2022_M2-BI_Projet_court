@@ -1,15 +1,17 @@
 import math
+from readline import append_history_file
 from Bio.PDB import *
 import numpy
 from scipy.spatial.distance import pdist, squareform
 import pandas
 
+## Dictionnaire des rayons de Vann der Waals
+vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S":1.8}
 
-## 1) Parser pdb pour obtenir les atomes et les coordonnées
-
+## Parser pdb pour obtenir les atomes et les coordonnées
 parser = PDBParser(PERMISSIVE=1)  #il ignore les erreurs
-structure_id = "7YL9"
-filename = "7YL9.pdb"
+structure_id = "3i40"
+filename = "3i40.pdb"
 structure = parser.get_structure(structure_id, filename)
 
 resi = []
@@ -24,11 +26,30 @@ for model in structure:
                 atom_co.append(atom.get_coord())
 
 atom_co_df = pandas.DataFrame(atom_co, columns=['x_co','y_co','z_co'], index=atom_id)
-print(atom_co_df)
 
-## 2) creation sphere centre sur l'atomes avec ajout du rayon de van der waals de l'h2o
+## Supprimé les d dans un fichier pdb
+new_atom_id = []
+new_atom_co = []
+for i in range(len(atom_id)):
+    if(atom_id[i] in list(vdw_ray.keys())):
+        new_atom_id.append(atom_id[i])
+        new_atom_co.append(atom_co[i])
+
+
+## creation sphere centre sur l'atomes avec ajout du rayon de van der waals de l'h2o
 def fibonacci_sphere(coordonnee, vdw_ray):
-
+    """
+    The fibonacci_sphere function generates a sphere of points on the surface of a
+    fibonacci sphere. The function takes two arguments, coordonnee and vdw_ray.
+    coordonnee is an array containing the x, y and z coordinates for the center of 
+    the sphere. vdw_ray is an integer representing the radius in angstroms to be used 
+    for each point on the fibonacci sphere.
+    
+    :param coordonnee: Define the center of the sphere
+    :param vdw_ray: Set the radius of the sphere
+    :return: A list of points
+    """
+    
     points = []
     gold = numpy.pi * (3. - numpy.sqrt(5.))  # nombre d'or
     sx =[]
@@ -36,7 +57,6 @@ def fibonacci_sphere(coordonnee, vdw_ray):
     sz =[]
     for i in range(92):
         y = 1 - (i / float(92 - 1)) * 2
-
         radius = numpy.sqrt(1 - y * y)  # radius at y
         theta = gold * i  # golden angle increment
         x = numpy.cos(theta) * radius
@@ -49,20 +69,14 @@ def fibonacci_sphere(coordonnee, vdw_ray):
     return points
 
 
-## 3) Calcule de la matrice de distance entre chaque atome en data frame
+## Calcule de la matrice de distance entre chaque atome en data frame
+atom_co_array=numpy.array(new_atom_co) #matrice avec les coordonnées
+distances_df = pandas.DataFrame(squareform(pdist(atom_co_array)), columns=new_atom_id, index=new_atom_id) #calcule des distances entre chaque atome et archivage dans un df
 
-atom_co_array=numpy.array(atom_co) #matrice avec les coordonnées
-distances_df = pandas.DataFrame(squareform(pdist(atom_co_array)), columns=atom_id, index=atom_id) #calcule des distances entre chaque atome et archivage dans un df
-
-## 4) Dictionnaire des rayons de Vann der Waals
-
-vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S":1.8}
-
-## 5) Recherche des atomes voisins à 10A
-
+## Recherche des atomes voisins à 10A
+point_surface = []
 for atom in range(distances_df):
     numpy.where(distances_df[:][atom]<10) #extrait les indexes ou la distance entre 2 atomes est inf a 10A
-    point_sphere = fibonacci_sphere( atom_co_df[atom],vdw_ray[atom_id[atom]])
+    point_sphere = fibonacci_sphere( atom_co_df[atom],vdw_ray[new_atom_id[atom]])
     for point in range(point_sphere):
         if point<
-

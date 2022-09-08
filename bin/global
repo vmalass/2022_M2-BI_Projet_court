@@ -11,7 +11,7 @@ vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S":1.8}
 ## Parser pdb pour obtenir les atomes et les coordonnées
 parser = PDBParser(PERMISSIVE=1)  #il ignore les erreurs
 structure_id = "3i40"
-filename = "3i40.pdb"
+filename = "./data/3i40.pdb"
 structure = parser.get_structure(structure_id, filename)
 
 resi = []
@@ -22,18 +22,12 @@ for model in structure:
         for residue in chain:
             resi.append(residue)
             for atom in residue:
-                atom_id.append(str(atom)[6])
-                atom_co.append(atom.get_coord())
+                if str(atom)[6] != "d": #supprime les d
+                    atom_id.append(str(atom)[6])
+                    atom_co.append(atom.get_coord())
 
-atom_co_df = pandas.DataFrame(atom_co, columns=['x_co','y_co','z_co'], index=atom_id)
-
-## Supprimé les d dans un fichier pdb
-new_atom_id = []
-new_atom_co = []
-for i in range(len(atom_id)):
-    if(atom_id[i] in list(vdw_ray.keys())):
-        new_atom_id.append(atom_id[i])
-        new_atom_co.append(atom_co[i])
+atom_co = numpy.array(atom_co)
+#atom_co_df = pandas.DataFrame(atom_co, columns=['x_co','y_co','z_co'], index=atom_id)
 
 
 ## creation sphere centre sur l'atomes avec ajout du rayon de van der waals de l'h2o
@@ -70,13 +64,41 @@ def fibonacci_sphere(coordonnee, vdw_ray):
 
 
 ## Calcule de la matrice de distance entre chaque atome en data frame
-atom_co_array=numpy.array(new_atom_co) #matrice avec les coordonnées
-distances_df = pandas.DataFrame(squareform(pdist(atom_co_array)), columns=new_atom_id, index=new_atom_id) #calcule des distances entre chaque atome et archivage dans un df
+
+distances_atom = squareform(pdist(atom_co)) #calcule des distances entre chaque atome et archivage dans un df
+
+
+
+def distance_euclidienne(co_pts_sphere, co_voisin):
+    math.sqrt((co_pts_sphere[0]-co_voisin[0])**2+(co_pts_sphere[1]-co_voisin[2])**2+(co_pts_sphere[2]-co_voisin[2])**2)
+
 
 ## Recherche des atomes voisins à 10A
 point_surface = []
-for atom in range(distances_df):
-    numpy.where(distances_df[:][atom]<10) #extrait les indexes ou la distance entre 2 atomes est inf a 10A
-    point_sphere = fibonacci_sphere( atom_co_df[atom],vdw_ray[new_atom_id[atom]])
-    for point in range(point_sphere):
-        if point<
+indexe_voisin = []
+distance = []
+
+for id, coor in zip(atom_id, atom_co):
+    filtre_1 = coor < 10
+    filtre_2 = coor > 0
+    indexe_voisin = numpy.where(filtre_1 & filtre_2) #extrait les indexes ou la distance entre 2 atomes est inf a 10A
+    # print(indexe_voisin)
+    point_sphere = fibonacci_sphere(coor,vdw_ray[id])
+    point_surface_atom = 0
+    #print(point_sphere)
+    for point in point_sphere:
+        flag_break=True
+        for voisin in indexe_voisin:
+            distance = distance_euclidienne(point, atom_co[voisin])
+            if distance<vdw_ray[atom_id[voisin]]:
+                flag_break=False
+                break
+        if flag_break:
+            point_surface_atom +=1
+    point_surface.append(point_surface_atom)
+
+
+
+
+
+

@@ -97,4 +97,3 @@ for id, coor in zip(range(len(atom_id)), atom_co):
         if flag_break:
             point_surface_atom +=1
     point_surface.append(point_surface_atom)
-

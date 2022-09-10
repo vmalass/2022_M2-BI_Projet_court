@@ -1,0 +1,8 @@
+name: calcule_surface_prot_solvant
+channels:
+    - defaults
+    - conda-forge
+dependencies:
+    - biopython=1.78  
+    - numpy=1.21.5
+    - scipy=1.7.3  

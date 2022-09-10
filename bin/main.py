@@ -1,5 +1,3 @@
-import math
-from readline import append_history_file
 from Bio.PDB import *
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
@@ -49,3 +47,4 @@ for id, coor in zip(range(len(atom_id)), atom_co):
         if flag_break:
             point_surface_atom +=1
     point_surface.append(point_surface_atom)
+print(point_surface)

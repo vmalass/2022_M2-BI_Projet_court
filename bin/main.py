@@ -3,11 +3,10 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import function_prot_expo as fpe
 
-## Dictionnaire des rayons de Vann der Waals
-vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S":1.8}
+vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S": 1.8}  # Dictionary of Van der Waals rays.
 
-## Parser pdb pour obtenir les atomes et les coordonnées
-parser = PDBParser(PERMISSIVE=1)  #permet d'ignorer les erreurs
+# Parser pdb for obtain atoms' coordonates.
+parser = PDBParser(PERMISSIVE=1)  # Allows errors to be ignored.
 structure_id = "3i40"
 filename = "./data/3i40.pdb"
 structure = parser.get_structure(structure_id, filename)
@@ -20,31 +19,31 @@ for model in structure:
         for residue in chain:
             resi.append(residue)
             for atom in residue:
-                if str(atom)[6] != "d": #supprime les d
-                    atom_id.append(str(atom)[6])
-                    atom_co.append(atom.get_coord())
+                if str(atom)[6] != "d":  # Removes the d (disordered atoms).
+                    atom_id.append(str(atom)[6])  # Obtain the atoms' identifications.
+                    atom_co.append(atom.get_coord())  # Obtain the atoms' coordonates.
 
-atom_co = np.array(atom_co)
+atom_co = np.array(atom_co)  # Created a array matrix.
 
-## Calcule de la matrice de distance entre chaque atome en data frame
-distances_atom = squareform(pdist(atom_co)) 
+# Calculation of the distance matrix between each atom.
+distances_atom = squareform(pdist(atom_co))
 
-## Recherche des atomes voisins à 10A
-point_surface = []
-indexe_voisin = []
+# Search neighbours' atoms.
+surface_point = []
+index_neighbour = []
 distance = []
 for id, coor in zip(range(len(atom_id)), atom_co):
-    indexe_voisin = np.where((distances_atom[:][id] <10) & (distances_atom[:][id]  >0))[0] #extrait les indexes ou la distance entre 2 atomes est inf a 10A
-    point_sphere = fpe.fibonacci_sphere(coor,vdw_ray[atom_id[id]])
-    point_surface_atom = 0
+    index_neighbour = np.where((distances_atom[:][id] < 10) & (distances_atom[:][id] > 0))[0]  # neighbours extraction
+    point_sphere = fpe.fibonacci_sphere(coor, vdw_ray[atom_id[id]])  # Creation of a sphere around the atom
+    surface_point_atom = 0  # Counter for the exposed points of the sphere
     for point in point_sphere:
-        flag_break=True
-        for voisin in indexe_voisin:
-            distance = fpe.distance_euclidienne(point, atom_co[voisin])
-            if distance<vdw_ray[atom_id[voisin]]:
-                flag_break=False
+        flag_break = True
+        for neighbour in index_neighbour:
+            distance = fpe.distance_euclidienne(point, atom_co[neighbour])  # Calculation of the distance between a point on the sphere and the neighbouring atom
+            if distance < vdw_ray[atom_id[neighbour]]:
+                flag_break = False
                 break
         if flag_break:
-            point_surface_atom +=1
-    point_surface.append(point_surface_atom)
-print(point_surface)
+            surface_point_atom += 1
+    surface_point.append(surface_point_atom)  # Storage of the points of the free sphere in a list
+print(surface_point)

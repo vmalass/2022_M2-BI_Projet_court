@@ -9,15 +9,16 @@ Noyaux Unix
 ### Environnement :
 Le fichier .yml contient l'environnement conda, voici les lignes de code à faire un terminal pour recréer l'environnement:
 ```bash
-$$$$$$$$$$$
-.
-.
-à faire
-.
-.
-$$$$$$$$$$$
+conda env create -f env_conda.yml
+conda activate env_conda
 ```
 
+**N'hésitez pas à utiliser mamba pour plus de rapidité:
+```bash
+conda install mamba -n base -c conda-forge
+mamba env create -f env_conda.yml
+conda activate env_conda
+```
 ###  Utilisation :
 1. Cloner le dépôt :
 ```bash

@@ -6,6 +6,12 @@ L'objectif de ce programme python est de calculer la surface accessible d'une pr
 ### Systeme :
 Noyaux Unix 
 
+### Usage :
+Il faudra cloner le répertoire git suivant :
+```bash
+git clone https://github.com/vmalass/2022_M2-BI_Projet_court.git
+```
+
 ### Environnement :
 Le fichier .yml contient l'environnement conda, voici les lignes de code à faire un terminal pour recréer l'environnement:
 ```bash

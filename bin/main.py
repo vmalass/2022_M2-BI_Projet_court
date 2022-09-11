@@ -33,17 +33,17 @@ surface_point = []
 index_neighbour = []
 distance = []
 for id, coor in zip(range(len(atom_id)), atom_co):
-    index_neighbour = np.where((distances_atom[:][id] < 10) & (distances_atom[:][id] > 0))[0]  # neighbours extraction
-    point_sphere = fpe.fibonacci_sphere(coor, vdw_ray[atom_id[id]])  # Creation of a sphere around the atom
-    surface_point_atom = 0  # Counter for the exposed points of the sphere
+    index_neighbour = np.where((distances_atom[:][id] < 10) & (distances_atom[:][id] > 0))[0]  # neighbours extraction.
+    point_sphere = fpe.fibonacci_sphere(coor, vdw_ray[atom_id[id]])  # Creation of a sphere around the atom.
+    surface_point_atom = 0  # Counter for the exposed points of the sphere.
     for point in point_sphere:
         flag_break = True
         for neighbour in index_neighbour:
-            distance = fpe.distance_euclidienne(point, atom_co[neighbour])  # Calculation of the distance between a point on the sphere and the neighbouring atom
+            distance = fpe.distance_euclidienne(point, atom_co[neighbour])  # Calculation of the distance between a point on the sphere and the neighbouring atom.
             if distance < vdw_ray[atom_id[neighbour]]:
                 flag_break = False
                 break
         if flag_break:
             surface_point_atom += 1
-    surface_point.append(surface_point_atom)  # Storage of the points of the free sphere in a list
+    surface_point.append(surface_point_atom)  # Storage of the points of the free sphere in a list.
 print(surface_point)

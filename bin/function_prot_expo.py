@@ -3,8 +3,8 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 
 # Constant
-H2o_ray = 1.7
-Cst_sphere = 92
+H2O_RAY = 1.7
+CST_SPHERE = 92
 
 
 def fibonacci_sphere(coordonnee, vdw_ray):
@@ -25,13 +25,13 @@ def fibonacci_sphere(coordonnee, vdw_ray):
     sy = []
     sz = []
     xyz = []
-    for i in range(Cst_sphere):
-        y = 1 - (i / float(Cst_sphere - 1)) * 2
+    for i in range(CST_SPHERE):
+        y = 1 - (i / float(CST_SPHERE - 1)) * 2
         radius = np.sqrt(1 - y * y)
         theta = gold * i
         x = np.cos(theta) * radius
         z = np.sin(theta) * radius
-        rayon = vdw_ray + (H2o_ray * 2)
+        rayon = vdw_ray + (H2O_RAY)
 
         sx = (rayon * x + coordonnee[0])
         sy = (rayon * y + coordonnee[1])

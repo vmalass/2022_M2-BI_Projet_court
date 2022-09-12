@@ -7,13 +7,13 @@ L'objectif de ce programme python est de calculer la surface accessible d'une pr
 Noyaux Unix 
 
 ### Environnement :
-Le fichier .yml contient l'environnement conda, voici les lignes de code à faire un terminal pour recréer l'environnement:
+Le fichier .yml contient l'environnement conda, voici les lignes de code à faire un terminal pour recréer l'environnement :
 ```bash
 $ conda env create -f env_conda.yml
 $ conda activate env_conda
 ```
 
-**N'hésitez pas à utiliser mamba pour plus de rapidité:
+**N'hésitez pas à utiliser mamba pour plus de rapidité :
 ```bash
 $ conda install mamba -n base -c conda-forge
 $ mamba env create -f env_conda.yml
@@ -28,7 +28,21 @@ vous pouvez également télécharger le fichier zip que le décompresser
 
 2. Exécution du code :
 ```bash
-$ python main.py
+$ python main.py file.pdb
 ```
 
-### Exemple :
+### Procedure et exmple :
+En résumé voici l'ordre d'exécution des commandes dans le terminal :
+```bash
+$ git clone https://github.com/vmalass/2022_M2-BI_Projet_court.git
+$ conda env create -f env_conda.yml
+$ conda activate env_conda
+$ python main.py 3i40.pdb
+```
+Résultat obtenu :
+```bash
+
+```
+
+## Auteurs :
+Malassigné Victor

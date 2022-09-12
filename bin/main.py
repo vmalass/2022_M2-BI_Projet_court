@@ -5,40 +5,47 @@ import function_prot_expo as fpe
 import sys
 
 # Import pdb file.
-try:
-    file_name = sys.argv[1]
-except:
-    print('Enter the file.pdb')
-    sys.exit("Usage:python test.py file.pdb")
+# try:
+#     file_name = sys.argv[1]
+# except:
+#     print('Enter the file.pdb')
+#     sys.exit("Usage:python test.py file.pdb")
 
-# Constant
-H2o_ray = 1.7
-Cst_sphere = 92
+# Constant.
+H20_RAY = 1.7
+CST_SPHERE = 92
 
 # Dictionary of Van der Waals rays.
 vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S": 1.8}
 
-# Parser pdb for obtain atoms' coordonates.
+# Dictionary of residue.
+residue_aera = {"ALA": 129, "ARG": 274, "ASN": 195, "ASP": 193, "CYS": 167, "GLU": 223,
+ "GLN": 225, "GLY": 104, "HIS": 224, "ILE": 197, "LEU": 201, "LYS": 236,"MET": 224, 
+ "PHE": 240, "PRO": 159, "SER": 155, "THR": 172, "TRP": 285, "TYR": 263, "VAL": 174}
+
+# Parser pdb for obtain atoms' coordonates, identifications and residues.
 parser = PDBParser(PERMISSIVE=1)  # Allows errors to be ignored.
-structure_id = file_name.replace(".pdb", "")
-filename = file_name
+# structure_id = file_name.replace(".pdb", "")
+# filename = file_name
+structure_id = '3i40'
+filename = '3i40.pdb'
 structure = parser.get_structure(structure_id, filename)
 
 resi = []
 atom_id = []
 atom_co = []
-for model in structure:
-    for chain in model:
-        for residue in chain:
-            for atom in residue:
-                # Removes the d (disordered atoms).
-                if str(atom)[6] != "d":
-                    # Obtain the atoms' identifications.
-                    atom_id.append(str(atom)[6])
-                    # Obtain the atoms' coordonates.
-                    atom_co.append(atom.get_coord())
-                    # Obtain the residue.
-                    resi.append(atom.get_parent())
+
+for chain in structure[0]:  # Choose first model in pdb
+    for residue in chain:
+        for atom in residue:
+            # Removes the d (disordered atoms).
+            if str(atom)[6] != "d":
+                # Obtain the atoms' identifications.
+                atom_id.append(str(atom)[6])
+                # Obtain the atoms' coordonates.
+                atom_co.append(atom.get_coord())
+                # Obtain the residue.
+                resi.append(atom.get_parent())
 
 atom_co = np.array(atom_co)  # Created a array matrix.
 
@@ -54,7 +61,7 @@ distance = []
 for id, coor in zip(range(len(atom_id)), atom_co):
     # neighbours extraction.
     index_neighbour = np.where((distances_atom[:][id] < 10) &
-                               (distances_atom[:][id] > 0))[0]
+                               (distances_atom[:][id] != 0))[0]
     # Creation of a sphere around the atom.
     point_sphere = fpe.fibonacci_sphere(coor, vdw_ray[atom_id[id]])
     surface_point_atom = 0  # Counter for the exposed points of the sphere.
@@ -64,17 +71,18 @@ for id, coor in zip(range(len(atom_id)), atom_co):
             # Calculation of the distance between a point on the sphere and the
             # neighbouring atom.
             distance = fpe.distance_euclidienne(point, atom_co[neighbour])
-            if distance < vdw_ray[atom_id[neighbour]]:
+            if distance < (vdw_ray[atom_id[neighbour]] + H20_RAY):
                 flag_break = False
                 break
         if flag_break:
             surface_point_atom += 1
         # Calculation the ratio exposure point and surface in angstroms per atoms
-        ratio = (surface_point_atom / Cst_sphere) * (vdw_ray[atom_id[id]] + H2o_ray)
+    ratio = (surface_point_atom / CST_SPHERE) * (4 * np.pi * (vdw_ray[atom_id[id]] + H20_RAY)**2)
     # Storage of the points of the free sphere in a list.
     surface_point.append(surface_point_atom)
     surface_atom_expose.append(ratio)
 
 # Calculation the surface exposed.
 area = sum(surface_atom_expose)
-print(len(surface_atom_expose))
+print(surface_point)
+print(area)

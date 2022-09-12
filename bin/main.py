@@ -2,14 +2,26 @@ from Bio.PDB import *
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import function_prot_expo as fpe
+import sys
+
+# Import pdb file.
+try:
+    file_name = sys.argv[1]
+except:
+    print('Enter the file.pdb')
+    sys.exit("Usage:python test.py file.pdb")
+
+# Constant
+H2o_ray = 1.7
+Cst_sphere = 92
 
 # Dictionary of Van der Waals rays.
 vdw_ray = {"H": 1.2, "C": 1.7, "N": 1.55, "O": 1.52, "P": 1.8, "S": 1.8}
 
 # Parser pdb for obtain atoms' coordonates.
 parser = PDBParser(PERMISSIVE=1)  # Allows errors to be ignored.
-structure_id = "3i40"
-filename = "./data/3i40.pdb"
+structure_id = file_name.replace(".pdb", "")
+filename = file_name
 structure = parser.get_structure(structure_id, filename)
 
 resi = []
@@ -35,6 +47,8 @@ distances_atom = squareform(pdist(atom_co))
 
 # Search neighbours' atoms.
 surface_point = []
+surface_atom_expose = []
+ratio = []
 index_neighbour = []
 distance = []
 for id, coor in zip(range(len(atom_id)), atom_co):
@@ -55,5 +69,12 @@ for id, coor in zip(range(len(atom_id)), atom_co):
                 break
         if flag_break:
             surface_point_atom += 1
+        # Calculation the ratio exposure point and surface in angstroms per atoms
+        ratio = (surface_point_atom / Cst_sphere) * (vdw_ray[atom_id[id]] + H2o_ray)
     # Storage of the points of the free sphere in a list.
     surface_point.append(surface_point_atom)
+    surface_atom_expose.append(ratio)
+
+# Calculation the surface exposed.
+area = sum(surface_atom_expose)
+print(len(surface_atom_expose))

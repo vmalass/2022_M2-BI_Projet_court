@@ -2,6 +2,10 @@ from Bio.PDB import *
 import numpy as np
 from scipy.spatial.distance import pdist, squareform
 
+# Constant
+H2o_ray = 1.7
+Cst_sphere = 92
+
 
 def fibonacci_sphere(coordonnee, vdw_ray):
     """
@@ -21,13 +25,13 @@ def fibonacci_sphere(coordonnee, vdw_ray):
     sy = []
     sz = []
     xyz = []
-    for i in range(92):
-        y = 1 - (i / float(92 - 1)) * 2
+    for i in range(Cst_sphere):
+        y = 1 - (i / float(Cst_sphere - 1)) * 2
         radius = np.sqrt(1 - y * y)
         theta = gold * i
         x = np.cos(theta) * radius
         z = np.sin(theta) * radius
-        rayon = vdw_ray + (1.7 * 2)
+        rayon = vdw_ray + (H2o_ray * 2)
 
         sx = (rayon * x + coordonnee[0])
         sy = (rayon * y + coordonnee[1])

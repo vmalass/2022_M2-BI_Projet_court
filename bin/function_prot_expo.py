@@ -10,7 +10,7 @@ def fibonacci_sphere(coordonnee, vdw_ray):
     The function takes two arguments:
         coordonnee : Position of the atom in the protein (x,y,z)
         vdw_ray : The Van der Waals radius of the atom in angstroms
-    
+
     :param coordonnee : Set the centre of the sphere
     :param vdw_ray : Define the radius of the sphere which will be used to
     generate points
@@ -41,14 +41,16 @@ def fibonacci_sphere(coordonnee, vdw_ray):
 def distance_euclidienne(co_pts_sphere, co_voisin):
     """
     The function Euclidean_distance calculates the distance between
-    two points in 3D space. 
+    two points in 3D space.
     It takes as input two lists :
-        co_pts_sphere : coordinates of the points of the sphere
-        co_voisin : coordinates of the neighbouring atom to the sphere. 
-    
+        co_pts_sphere : coordinates of the points of the sphere.
+        co_voisin : coordinates of the neighbouring atom to the sphere.
+
     :param co_pts_sphere : Coordinate of a point of the sphere
     :param co_neighbour : Coordinate of the neighbouring atom
     :return : The distance between two points
     """
-    distance = np.sqrt((co_pts_sphere[0] - co_voisin[0])**2 + (co_pts_sphere[1] - co_voisin[1])**2 + (co_pts_sphere[2] - co_voisin[2])**2)
+    distance = np.sqrt((co_pts_sphere[0] - co_voisin[0])**2 +
+                       (co_pts_sphere[1] - co_voisin[1])**2 +
+                       (co_pts_sphere[2] - co_voisin[2])**2)
     return distance

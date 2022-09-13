@@ -32,20 +32,24 @@ filename = '3i40.pdb'
 structure = parser.get_structure(structure_id, filename)
 
 resi = []
+unique_residue = []
 atom_id = []
 atom_co = []
 
 for chain in structure[0]:  # Choose first model in pdb
     for residue in chain:
-        for atom in residue:
-            # Removes the d (disordered atoms).
-            if str(atom)[6] != "d":
-                # Obtain the atoms' identifications.
-                atom_id.append(str(atom)[6])
-                # Obtain the atoms' coordonates.
-                atom_co.append(atom.get_coord())
-                # Obtain the residue.
-                resi.append(atom.get_parent())
+        # Choose just ATOM.
+        if is_aa(residue):       ## augmente aera avec perte de 35 atomes) ##
+            unique_residue.append(str(residue).split(" ")[1])
+            for atom in residue:
+                # Removes the d (disordered atoms).
+                if str(atom)[6] != "d":
+                    # Obtain the atoms' identifications.
+                    atom_id.append(str(atom)[6])
+                    # Obtain the atoms' coordonates.
+                    atom_co.append(atom.get_coord())
+                    # Obtain just the residue.
+                    resi.append(str(atom.get_parent()).split(" ")[1])
 
 atom_co = np.array(atom_co)  # Created a array matrix.
 
@@ -58,6 +62,7 @@ surface_atom_expose = []
 ratio = []
 index_neighbour = []
 distance = []
+total_surface_prot = 0
 for id, coor in zip(range(len(atom_id)), atom_co):
     # neighbours extraction.
     index_neighbour = np.where((distances_atom[:][id] < 10) &
@@ -77,12 +82,23 @@ for id, coor in zip(range(len(atom_id)), atom_co):
         if flag_break:
             surface_point_atom += 1
         # Calculation the ratio exposure point and surface in angstroms per atoms
+    total_surface_prot += (4 * np.pi * (vdw_ray[atom_id[id]] + H20_RAY)**2)
     ratio = (surface_point_atom / CST_SPHERE) * (4 * np.pi * (vdw_ray[atom_id[id]] + H20_RAY)**2)
     # Storage of the points of the free sphere in a list.
     surface_point.append(surface_point_atom)
     surface_atom_expose.append(ratio)
 
-# Calculation the surface exposed.
+# Calculation the surface exposed per atoms.
 area = sum(surface_atom_expose)
-print(surface_point)
-print(area)
+
+# Calculation the surface exposed per residues.
+area_residue = {}
+for key, value in zip(resi, surface_atom_expose):
+    area_residue[key] = area_residue.get(key, 0) + value
+
+relative_area=0
+for res in unique_residue:
+    relative_area += area_residue[res]/residue_aera[res]
+
+access_100 = 100 * area / total_surface_prot
+

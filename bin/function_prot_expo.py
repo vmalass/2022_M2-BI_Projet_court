@@ -58,3 +58,40 @@ def distance_euclidienne(co_pts_sphere, co_voisin):
                        (co_pts_sphere[1] - co_voisin[1])**2 +
                        (co_pts_sphere[2] - co_voisin[2])**2)
     return distance
+
+
+def residue_area(indexe_residue, expose_surface_atom):
+    """
+    The residue_area function takes in a list of residue and the corresponding
+    exposure surface area for each atom in residues. It returns a dictionary
+    with the residues as keys and their corresponding exposure surface area
+    as values.
+
+    :param indexe_residue: The residue index.
+    :param expose_surface_atom: The area of each atoms in residue.
+    :return: A dictionary with the key being the residue index and value
+    being the total surface area of that residue exposed to solvent
+    """
+    area_residue = {}
+    for key, value in zip(indexe_residue, expose_surface_atom):
+        area_residue[key] = area_residue.get(key, 0) + value
+    return area_residue
+
+
+def area_relative(chain_residue, area_residue):
+    """
+    The area_relative function takes one liste and dictionarie as input. The
+    list contains each residue in a protein, and the dictionary contains the
+    total area of each residue in a protein. The function then returns an
+    integer representing how much more exposed relative surface exposition
+    in protein.
+
+    :param chain_residue: Specify which residues to include in the calculation
+    of relative area
+    :param area_residue: Calculate the relative area of each residue in a chain
+    :return: The relative area of the chain to the total surface area
+    """
+    relative_area = 0
+    for res in chain_residue:
+        relative_area += area_residue[res]/area_residue[res]
+    return relative_area

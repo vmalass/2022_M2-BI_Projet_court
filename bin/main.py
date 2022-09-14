@@ -1,3 +1,18 @@
+"""
+Calculation of the solvent accessible surface of a protein.
+
+Usage:
+======
+    python main.py 3i40.pdb
+
+    argument1: file.pdb
+"""
+
+__authors__ = ("Victor Malassigné")
+__contact__ = ("victor.malassigne@ens-lyon.fr")
+__copyright__ = "MIT"
+__date__ = "2022-09-14"
+
 from Bio.PDB import *
 import numpy as np
 from scipy.spatial.distance import pdist, squareform

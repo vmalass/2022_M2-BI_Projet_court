@@ -38,7 +38,7 @@ En résumé voici l'ordre d'exécution des commandes dans le terminal avec la pr
 $ git clone https://github.com/vmalass/2022_M2-BI_Projet_court.git
 $ conda env create -f env_conda.yml
 $ conda activate env_conda
-$ python main.py 3i40.pdb
+$ python bin/main.py data/3i40.pdb
 ```
 Temps d'execution ~5s
 Résultat obtenu :
@@ -49,9 +49,9 @@ Percentage of accessible surface : 5.94 %
 ```
 Avec une autre protéine 6a5j:
 ```bash
-$ python main.py 6a5j.pdb
+$ python bin/main.py data/6a5j.pdb
 ```
-Temps d'execution ~5s
+Temps d'execution ~5s  
 Résultat obtenu :
 ```bash
 Solvent surface protein accessible per atom : 1710.57 Å
@@ -60,9 +60,9 @@ Percentage of accessible surface : 5.46 %
 ```
 Avec une autre protéine 7u52 de 135 résidues:
 ```bash
-$ python main.py 7u52.pdb
+$ python bin/main.py data/7u52.pdb
 ```
-Temps d'execution ~1min30s
+Temps d'execution ~1min30s  
 Résultat obtenu :
 ```bash
 Solvent surface protein accessible per atom : 33308.80 Å

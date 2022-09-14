@@ -61,7 +61,7 @@ for id, coor in zip(range(len(atom_id)), atom_co):
                 break
         if flag_break:
             surface_point_atom += 1
-        # Calculation the ratio exposure point and surface in angstroms per atoms
+    # Calculation the ratio exposure point and surface in angstroms per atoms
     total_surface_prot += (4 * np.pi * (vdw_ray[atom_id[id]] + H20_RAY)**2)
     ratio = ((surface_point_atom / CST_SPHERE) *
              (4 * np.pi * (vdw_ray[atom_id[id]] + H20_RAY)**2))

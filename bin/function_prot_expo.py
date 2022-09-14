@@ -5,6 +5,7 @@ import numpy as np
 H2O_RAY = 1.7
 CST_SPHERE = 92
 
+
 def parser_filter(parser_object):
     """
     The parser_filter function takes a parser object (in Bio.PDB) and
@@ -35,7 +36,6 @@ def parser_filter(parser_object):
                         # Obtain just the residue.
                         resi.append(str(atom.get_parent()).split(" ")[1])
     return resi, unique_residue, atom_id, atom_co
-
 
 
 def fibonacci_sphere(coordonnee, vdw_ray):

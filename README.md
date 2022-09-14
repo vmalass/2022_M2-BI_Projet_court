@@ -19,6 +19,7 @@ $ conda install mamba -n base -c conda-forge
 $ mamba env create -f env_conda.yml
 $ conda activate env_conda
 ```
+
 ###  Utilisation :
 1. Cloner le dépôt :
 ```bash
@@ -68,5 +69,6 @@ Solvent surface protein accessible per atom : 33308.80 Å
 Exposed surface per residue : 747.00 Å
 Percentage of accessible surface : 4.01 %
 ```
+
 ## Auteurs :
 Malassigné Victor

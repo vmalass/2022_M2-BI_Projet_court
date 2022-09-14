@@ -1,10 +1,41 @@
 from Bio.PDB import *
 import numpy as np
-from scipy.spatial.distance import pdist, squareform
 
 # Constant
 H2O_RAY = 1.7
 CST_SPHERE = 92
+
+def parser_filter(parser_object):
+    """
+    The parser_filter function takes a parser object (in Bio.PDB) and
+    returns the residues, unique residues, atomic identification numbers
+    and coordinates.
+
+    :param parser_object: the parser object
+    :return: residues, unique residues, atom identification numbers
+             and coordinates.
+    """
+    resi = []
+    unique_residue = []
+    atom_id = []
+    atom_co = []
+
+    for chain in parser_object[0]:  # Choose first model in pdb
+        for residue in chain:
+            # Choose just ATOM.
+            if is_aa(residue):
+                unique_residue.append(str(residue).split(" ")[1])
+                for atom in residue:
+                    # Removes the d (disordered atoms).
+                    if str(atom)[6] != "d":
+                        # Obtain the atoms' identifications.
+                        atom_id.append(str(atom)[6])
+                        # Obtain the atoms' coordonates.
+                        atom_co.append(atom.get_coord())
+                        # Obtain just the residue.
+                        resi.append(str(atom.get_parent()).split(" ")[1])
+    return resi, unique_residue, atom_id, atom_co
+
 
 
 def fibonacci_sphere(coordonnee, vdw_ray):

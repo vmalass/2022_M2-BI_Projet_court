@@ -3,14 +3,7 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import function_prot_expo as fpe
 import sys
-# from tqdm import tqdm
-# from time import sleep
 
-# for i in tqdm(range(0, 100), total = 100, ncols = 100,
-#               desc ="Calculate surface in progress"):
-#     sleep(.1)
-
-# Import pdb file.
 try:
     file_name = sys.argv[1]
 except Exception:
@@ -34,29 +27,9 @@ residue_aera = {"ALA": 129, "ARG": 274, "ASN": 195, "ASP": 193, "CYS": 167,
 parser = PDBParser(PERMISSIVE=1)  # Allows errors to be ignored.
 structure_id = file_name.replace(".pdb", "")
 filename = file_name
-# structure_id = '6a5j'
-# filename = '6a5j.pdb'
 structure = parser.get_structure(structure_id, filename)
 
-resi = []
-unique_residue = []
-atom_id = []
-atom_co = []
-
-for chain in structure[0]:  # Choose first model in pdb
-    for residue in chain:
-        # Choose just ATOM.
-        if is_aa(residue):
-            unique_residue.append(str(residue).split(" ")[1])
-            for atom in residue:
-                # Removes the d (disordered atoms).
-                if str(atom)[6] != "d":
-                    # Obtain the atoms' identifications.
-                    atom_id.append(str(atom)[6])
-                    # Obtain the atoms' coordonates.
-                    atom_co.append(atom.get_coord())
-                    # Obtain just the residue.
-                    resi.append(str(atom.get_parent()).split(" ")[1])
+resi, unique_residue, atom_id, atom_co = fpe.parser_filter(structure)
 
 atom_co = np.array(atom_co)  # Created a array matrix.
 

@@ -13,7 +13,7 @@ $ conda env create -f env_conda.yml
 $ conda activate env_conda
 ```
 
-**N'hésitez pas à utiliser mamba pour plus de rapidité :
+** N'hésitez pas à utiliser mamba pour plus de rapidité :
 ```bash
 $ conda install mamba -n base -c conda-forge
 $ mamba env create -f env_conda.yml
@@ -32,17 +32,41 @@ $ python main.py file.pdb
 ```
 
 ### Procedure et exmple :
-En résumé voici l'ordre d'exécution des commandes dans le terminal :
+En résumé voici l'ordre d'exécution des commandes dans le terminal avec la protéine 3i40:
 ```bash
 $ git clone https://github.com/vmalass/2022_M2-BI_Projet_court.git
 $ conda env create -f env_conda.yml
 $ conda activate env_conda
 $ python main.py 3i40.pdb
 ```
+Temps d'execution ~5s
 Résultat obtenu :
 ```bash
-
+Solvent surface protein accessible per atom : 3297.35 Å
+Exposed surface per residue : 51.00 Å
+Percentage of accessible surface : 5.94 %
 ```
-
+Avec une autre protéine 6a5j:
+```bash
+$ python main.py 6a5j.pdb
+```
+Temps d'execution ~5s
+Résultat obtenu :
+```bash
+Solvent surface protein accessible per atom : 1710.57 Å
+Exposed surface per residue : 13.00 Å
+Percentage of accessible surface : 5.46 %
+```
+Avec une autre protéine 7u52 de 135 résidues:
+```bash
+$ python main.py 7u52.pdb
+```
+Temps d'execution ~1min30s
+Résultat obtenu :
+```bash
+Solvent surface protein accessible per atom : 33308.80 Å
+Exposed surface per residue : 747.00 Å
+Percentage of accessible surface : 4.01 %
+```
 ## Auteurs :
 Malassigné Victor

@@ -3,6 +3,12 @@ import numpy as np
 from scipy.spatial.distance import pdist, squareform
 import function_prot_expo as fpe
 import sys
+# from tqdm import tqdm
+# from time import sleep
+
+# for i in tqdm(range(0, 100), total = 100, ncols = 100,
+#               desc ="Calculate surface in progress"):
+#     sleep(.1)
 
 # Import pdb file.
 try:
